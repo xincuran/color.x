@@ -5,9 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(StoredEnergy))]
 public class Collector : MonoBehaviour {
     
-    float collectedEnergy;
-
     StoredEnergy energyComponent;
+
+    float collectedEnergy;
+    string colorOfEnergy;
 
     private void Start()
     {
@@ -18,14 +19,16 @@ public class Collector : MonoBehaviour {
     {
         if (energyComponent.canShootAgain)
         {
-            energyComponent.AddEnergy(collectedEnergy);
+            energyComponent.AddEnergy(collectedEnergy, colorOfEnergy);
             collectedEnergy = 0;
         }
     }
 
-    public void CollectEnergy (float energy)
+    public void CollectEnergy (float energy, string energyColor)
     {
         collectedEnergy += energy;
+        colorOfEnergy = energyColor;
+        energyComponent.canSetColor = true;
     }
 
     public bool CheckFilled()
