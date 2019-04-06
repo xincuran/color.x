@@ -28,6 +28,11 @@ public class StoredEnergy : MonoBehaviour {
             canSetColor = true;
         }
 
+        if (elementType == ELEMENT.GENERATOR)
+        {
+            currentEnergy = capacity;
+        }
+
         colorString = "";
         colorString = GetColor();
         SetColor();
