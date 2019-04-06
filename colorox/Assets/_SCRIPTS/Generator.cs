@@ -16,7 +16,7 @@ public class Generator : MonoBehaviour {
     {
         if (energyComponent.currentEnergy > 0 && energyComponent.canShootAgain)
         {
-            GameObject energy = (GameObject)Instantiate(Resources.Load("Energy"), transform.position, transform.rotation);
+            GameObject energy = (GameObject)Instantiate(Resources.Load("Energy"), transform.position, Quaternion.identity);
             energy.GetComponent<Energy>().SetEnergy(energyComponent.energyToReduce, energyComponent.GetColor(), gameObject);
         }
         energyComponent.ReduceEnergy();

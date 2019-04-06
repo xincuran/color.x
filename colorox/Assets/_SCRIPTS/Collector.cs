@@ -42,4 +42,20 @@ public class Collector : MonoBehaviour {
             return false;
         }
     }
+
+    public bool CheckColorMatch(string colorString)
+    {
+        string colorMatchString = energyComponent.GetColor();
+
+        if(colorString != colorMatchString && energyComponent.elementType == ELEMENT.COLLECTOR)
+        {
+            return false;
+        }
+        if (colorString.Length >= 2 && colorMatchString.Length == 1 && energyComponent.elementType == ELEMENT.WATT)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

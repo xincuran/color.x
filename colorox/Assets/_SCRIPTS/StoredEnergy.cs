@@ -116,9 +116,13 @@ public class StoredEnergy : MonoBehaviour {
     {
         if(elementType == ELEMENT.WATT && colorString != null && code != null)
         {
-            if (colorString.Length < 2 && code.Length <= 1 && colorString != code)
+            if ((colorString.Length < 2 && code.Length <= 1) && colorString != code)
             {
                 colorString += code;
+            }
+            if(colorString.Length <= 0 && code.Length == 2 && colorString != code)
+            {
+                colorString = code;
             }
             if (currentEnergy <= 0)
             {

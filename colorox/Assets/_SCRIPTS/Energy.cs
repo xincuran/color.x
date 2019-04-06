@@ -8,12 +8,13 @@ public class Energy : MonoBehaviour {
     string energyColor;
 
     GameObject author;
+    Vector3 direction;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Collector>() && other.gameObject != author)
         {
-            if(other.GetComponent<Collector>().CheckFilled() == false)
+            if(other.GetComponent<Collector>().CheckFilled() == false && other.GetComponent<Collector>().CheckColorMatch(energyColor) == true)
             {
                 other.GetComponent<Collector>().CollectEnergy(energyAmount, energyColor);
                 Destroy(gameObject);
@@ -23,16 +24,18 @@ public class Energy : MonoBehaviour {
 
     private void Update()
     {
-        transform.Translate(Vector3.right * Time.deltaTime * 5f);
+        transform.Translate(direction * Time.deltaTime * 6f);
         //Remember to add proper direction code.
-        //Create Color match system.
-        //Record the ac ca bug.
     }
 
     public void SetEnergy (float energy, string _color, GameObject authority)
     {
         energyAmount = energy;
         energyColor = _color;
+
+        GetComponent<Renderer>().material.color = RequiredColorRGBValues.GetColorFromString(energyColor);
+
         author = authority;
+        direction = (author.transform.GetChild(0).position - transform.position).normalized;
     }
 }
