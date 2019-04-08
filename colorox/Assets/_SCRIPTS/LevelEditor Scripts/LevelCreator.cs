@@ -5,9 +5,13 @@ using UnityEngine.UI;
 
 public class LevelCreator : MonoBehaviour {
 
+    [Header("Menus And Windows")]
     public ElementEditor elementEditor;
     public GameObject elementHolder;
     public GameObject editMoveMenu;
+    public GameObject levelCreatorMenu;
+    public GameObject levelPublishMenu;
+    public GameObject instructionsMenu;
 
     public List<EditableElement> currentElements = new List<EditableElement>();
 
@@ -34,6 +38,8 @@ public class LevelCreator : MonoBehaviour {
             if(plane.Raycast(ray, out enter))
             {
                 elementToEdit.transform.position = ray.GetPoint(enter);
+                levelCreatorMenu.SetActive(true);
+                instructionsMenu.transform.Find("MoveInstructions Text").gameObject.SetActive(false);
                 isMoving = false;
             }
         }
@@ -45,6 +51,8 @@ public class LevelCreator : MonoBehaviour {
             if (plane.Raycast(ray, out enter))
             {
                 elementToEdit.transform.position = ray.GetPoint(enter);
+                levelCreatorMenu.SetActive(true);
+                instructionsMenu.transform.Find("MoveInstructions Text").gameObject.SetActive(false);
                 isMoving = false;
             }
         }
@@ -53,17 +61,35 @@ public class LevelCreator : MonoBehaviour {
     public void CreateGenerator()
     {
         EditableElement elementGO = Instantiate(generatorPrefab, Vector3.zero, Quaternion.identity);
+        ElementCreator(elementGO);
+    }
+
+    public void CreateCollector()
+    {
+        EditableElement elementGO = Instantiate(collectorPrefab, Vector3.zero, Quaternion.identity);
+        ElementCreator(elementGO);
+    }
+
+    public void CreateWatt()
+    {
+        EditableElement elementGO = Instantiate(wattPrefab, Vector3.zero, Quaternion.identity);        
+        ElementCreator(elementGO);
+    }
+
+    private void ElementCreator (EditableElement elementGO)
+    {
         elementGO.transform.SetParent(elementHolder.transform);
 
         currentElements.Add(elementGO);
 
         EnableEditMoveMenu(elementGO);
         SetElementEditor();
+        elementEditor.SetEditableElementColor();
     }
 
     public void SetElementEditor()
     {
-        elementEditor.transform.position = elementToEdit.transform.position + (Vector3.right * 7f);
+        elementEditor.transform.position = SetEditorWindowPosition(7f, 2.35f);
         elementEditor.SetElementEntity(elementToEdit);
     }
 
@@ -71,13 +97,15 @@ public class LevelCreator : MonoBehaviour {
     {
         elementToEdit = elementGO;
         editMoveMenu.SetActive(true);
-        editMoveMenu.transform.position = elementToEdit.transform.position;
+        editMoveMenu.transform.position = SetEditorWindowPosition(1f, 1.74f);
+        elementEditor.gameObject.SetActive(false);
     }
 
     public void EditButton()
     {
         elementEditor.gameObject.SetActive(true);
         editMoveMenu.SetActive(false);
+        levelCreatorMenu.SetActive(false);
     }
 
     public void MoveButton()
@@ -85,6 +113,8 @@ public class LevelCreator : MonoBehaviour {
         isMoving = true;
         editMoveMenu.SetActive(false);
         elementEditor.gameObject.SetActive(false);
+        levelCreatorMenu.SetActive(false);
+        instructionsMenu.transform.Find("MoveInstructions Text").gameObject.SetActive(true);
     }
 
     public void TestButton()
@@ -93,5 +123,57 @@ public class LevelCreator : MonoBehaviour {
         {
             currentElements[i].SpawnPlayableElements();
         }
+        levelCreatorMenu.SetActive(false);
+        levelPublishMenu.SetActive(true);
+    }
+
+    public void EditLevelButton()
+    {
+        for (int i = 0; i < currentElements.Count; i++)
+        {
+            currentElements[i].gameObject.SetActive(true);
+            currentElements[i].RemoveCorrespondingElement();
+        }
+        levelCreatorMenu.SetActive(true);
+        levelPublishMenu.SetActive(false);
+    }
+
+    public void PublishButton()
+    {
+        //Convert To JSON.
+        //UploadToServer.
+        //Just add functionality.
+        //Check Completion before publishing.
+        print("Published.");
+    }
+
+    public void BackgroundButton()
+    {
+        editMoveMenu.SetActive(false);
+    }
+
+    private Vector3 SetEditorWindowPosition(float a, float b)
+    {
+        Vector3 pos = new Vector3();
+
+        if(elementToEdit.transform.position.x < 0)
+        {
+            pos += elementToEdit.transform.position + (Vector3.right * a);
+        }
+        if (elementToEdit.transform.position.x >= 0)
+        {
+            pos += elementToEdit.transform.position - (Vector3.right * a);
+        }
+
+        if (elementToEdit.transform.position.y < 0)
+        {
+            pos += (Vector3.up * b);
+        }
+        if (elementToEdit.transform.position.y >= 0)
+        {
+            pos -= (Vector3.up * b);
+        }
+
+        return pos;
     }
 }

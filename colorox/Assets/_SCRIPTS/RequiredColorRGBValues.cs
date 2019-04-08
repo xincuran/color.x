@@ -51,4 +51,40 @@ public static class RequiredColorRGBValues
 
         return fillColor;
     }
+
+    public static Color GetColorFromCode(COLORCODE colorcode)
+    {
+        Color fillColor = new Color();
+
+        if (colorcode == COLORCODE.RED)
+        {
+            fillColor = redColor;
+        }
+        if (colorcode == COLORCODE.YELLOW)
+        {
+            fillColor = yellowColor;
+        }
+        if (colorcode == COLORCODE.BLUE)
+        {
+            fillColor = blueColor;
+        }
+        if (colorcode == COLORCODE.ORANGE)
+        {
+            fillColor = orangeColor;
+        }
+        if (colorcode == COLORCODE.GREEN)
+        {
+            fillColor = greenColor;
+        }
+        if (colorcode == COLORCODE.VIOLET)
+        {
+            fillColor = violetColor;
+        }
+        if (colorcode == COLORCODE.CHANGABLE)
+        {
+            fillColor.a = 1;
+        }
+
+        return fillColor;
+    }
 }

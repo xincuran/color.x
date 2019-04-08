@@ -34,7 +34,7 @@ public class StoredEnergy : MonoBehaviour {
         }
 
         colorString = "";
-        colorString = GetColor();
+        SetColorString();
         SetColor();
     }
 
@@ -43,6 +43,10 @@ public class StoredEnergy : MonoBehaviour {
         if(currentEnergy < capacity)
         {
             currentEnergy += energy;
+            if(currentEnergy > capacity)
+            {
+                currentEnergy = capacity;
+            }
             if(elementType == ELEMENT.WATT && canSetColor)
             {
                 SetColor(energyColor);
@@ -55,7 +59,14 @@ public class StoredEnergy : MonoBehaviour {
     {
         if(currentEnergy > 0 && canShootAgain)
         {
-            currentEnergy -= energyToReduce;
+            if(currentEnergy >= energyToReduce)
+            {
+                currentEnergy -= energyToReduce;
+            }
+            else if(currentEnergy < energyToReduce)
+            {
+                currentEnergy -= currentEnergy;
+            }
             if (elementType == ELEMENT.WATT && currentEnergy <= 0)
             {
                 colorString = "";
@@ -153,6 +164,11 @@ public class StoredEnergy : MonoBehaviour {
     public void SetColor()
     {
         fillImage.color = RequiredColorRGBValues.GetColorFromString(colorString);
+    }
+
+    public void SetColorString()
+    {
+        colorString = GetColor();
     }
 }
 

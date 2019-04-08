@@ -81,6 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   e_ElementColor: 0
+  e_type: 2
   e_ElementType: {fileID: 114463937242054270, guid: 7782c68ad61ab6147974e7f240ad7fc0,
     type: 2}
   e_Capacity: 0

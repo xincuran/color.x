@@ -5,12 +5,14 @@ using UnityEngine;
 public class EditableElement : MonoBehaviour {
 
     public COLORCODE e_ElementColor;
+    public ELEMENT e_type;
     public StoredEnergy e_ElementType;
 
     public float e_Capacity;
     public float e_EnergyToReduce;
 
     LevelCreator levelCreator;
+    StoredEnergy correspondingElement;
 
     private void Start()
     {
@@ -27,18 +29,34 @@ public class EditableElement : MonoBehaviour {
         {
             elementGO.currentEnergy = elementGO.capacity;
         }
-        //Connect reduction variable.
-        //Setup Color edit by dropdown.
-        //Disable the editing buttons during test.
-        //Make an edit level button during test to switch to edit mode without exiting play mode.(try respawning editable elements and destroying
-        //actual ones.
-        //Make for Collector and Watt as well.
+        if(elementGO.elementType != ELEMENT.COLLECTOR)
+        {
+            elementGO.energyToReduce = e_EnergyToReduce;
+        }
+        if(elementGO.elementType != ELEMENT.WATT)
+        {
+            elementGO.elementColor = e_ElementColor;
+            elementGO.SetColorString();
+            elementGO.SetColor();
+        }
+        correspondingElement = elementGO;
+        //Create a docker for level creator menu.
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+    }
+
+    public void RemoveCorrespondingElement()
+    {
+        if(correspondingElement != null)
+        {
+            Destroy(correspondingElement.gameObject);
+        }
     }
 
     private void OnMouseDown()
     {
         levelCreator.EnableEditMoveMenu(this);
+
+        levelCreator.SetElementEditor();
     }
 }

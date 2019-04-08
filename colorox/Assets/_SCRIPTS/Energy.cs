@@ -25,7 +25,7 @@ public class Energy : MonoBehaviour {
     private void Update()
     {
         transform.Translate(direction * Time.deltaTime * 6f);
-        //Remember to add proper direction code.
+        //Remember to write shoot amount on arrow of direction of elements to give clear direction about shootage, shoot amount = reduce amount.
     }
 
     public void SetEnergy (float energy, string _color, GameObject authority)
