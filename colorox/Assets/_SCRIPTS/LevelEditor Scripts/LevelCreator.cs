@@ -7,6 +7,7 @@ public class LevelCreator : MonoBehaviour {
 
     [Header("Menus And Windows")]
     public ElementEditor elementEditor;
+    public GameObject dockButton;
     public GameObject elementHolder;
     public GameObject editMoveMenu;
     public GameObject levelCreatorMenu;
@@ -20,13 +21,15 @@ public class LevelCreator : MonoBehaviour {
     public EditableElement collectorPrefab;
     public EditableElement wattPrefab;
 
-    private EditableElement elementToEdit;
+    EditableElement elementToEdit;
     Plane plane;
+    Animator anim;
     bool isMoving;
 
     private void Start()
     {
         plane = new Plane(Vector3.forward, transform.position);
+        anim = levelCreatorMenu.GetComponent<Animator>();
     }
 
     private void Update()
@@ -40,6 +43,7 @@ public class LevelCreator : MonoBehaviour {
                 elementToEdit.transform.position = ray.GetPoint(enter);
                 levelCreatorMenu.SetActive(true);
                 instructionsMenu.transform.Find("MoveInstructions Text").gameObject.SetActive(false);
+                levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(true);
                 isMoving = false;
             }
         }
@@ -53,9 +57,12 @@ public class LevelCreator : MonoBehaviour {
                 elementToEdit.transform.position = ray.GetPoint(enter);
                 levelCreatorMenu.SetActive(true);
                 instructionsMenu.transform.Find("MoveInstructions Text").gameObject.SetActive(false);
+                levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(true);
                 isMoving = false;
             }
         }
+
+        dockButton.transform.position = levelCreatorMenu.transform.Find("Dock Button").position;
     }
 
     public void CreateGenerator()
@@ -106,6 +113,8 @@ public class LevelCreator : MonoBehaviour {
         elementEditor.gameObject.SetActive(true);
         editMoveMenu.SetActive(false);
         levelCreatorMenu.SetActive(false);
+        CloseDockButton();
+        levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(false);
     }
 
     public void MoveButton()
@@ -114,6 +123,8 @@ public class LevelCreator : MonoBehaviour {
         editMoveMenu.SetActive(false);
         elementEditor.gameObject.SetActive(false);
         levelCreatorMenu.SetActive(false);
+        CloseDockButton();
+        levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(false);
         instructionsMenu.transform.Find("MoveInstructions Text").gameObject.SetActive(true);
     }
 
@@ -124,6 +135,8 @@ public class LevelCreator : MonoBehaviour {
             currentElements[i].SpawnPlayableElements();
         }
         levelCreatorMenu.SetActive(false);
+        CloseDockButton();
+        levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(false);
         levelPublishMenu.SetActive(true);
     }
 
@@ -135,6 +148,7 @@ public class LevelCreator : MonoBehaviour {
             currentElements[i].RemoveCorrespondingElement();
         }
         levelCreatorMenu.SetActive(true);
+        levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(true);
         levelPublishMenu.SetActive(false);
     }
 
@@ -150,6 +164,20 @@ public class LevelCreator : MonoBehaviour {
     public void BackgroundButton()
     {
         editMoveMenu.SetActive(false);
+    }
+
+    public void OpenDockButton()
+    {
+        anim.SetTrigger("OpenDock");
+        dockButton.SetActive(true);
+        levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(false);
+    }
+
+    public void CloseDockButton()
+    {
+        anim.SetTrigger("CloseDock");
+        dockButton.SetActive(false);
+        levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(true);
     }
 
     private Vector3 SetEditorWindowPosition(float a, float b)

@@ -48,6 +48,7 @@ public class ElementEditor : MonoBehaviour {
     public void CloseElementEditor()
     {
         FindObjectOfType<LevelCreator>().levelCreatorMenu.SetActive(true);
+        FindObjectOfType<LevelCreator>().levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(true);
         gameObject.SetActive(false);
     }
 
@@ -55,6 +56,7 @@ public class ElementEditor : MonoBehaviour {
     {
         Destroy(elementEntity.gameObject);
         FindObjectOfType<LevelCreator>().levelCreatorMenu.SetActive(true);
+        FindObjectOfType<LevelCreator>().levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(true);
         gameObject.SetActive(false);
     }
 
