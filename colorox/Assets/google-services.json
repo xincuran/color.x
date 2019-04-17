@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "705113005184",
+    "firebase_url": "https://colorox-31415926535.firebaseio.com",
+    "project_id": "colorox-31415926535",
+    "storage_bucket": "colorox-31415926535.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705113005184:android:ec822ecc37b14a92",
+        "android_client_info": {
+          "package_name": "com.CRIXINUS.colorx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705113005184-47db6bto8e5o67ap5786qgkdln23eps7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoLitDBGYyXjRPwmfGmiq4nq1ZBv3aOCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705113005184-47db6bto8e5o67ap5786qgkdln23eps7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
