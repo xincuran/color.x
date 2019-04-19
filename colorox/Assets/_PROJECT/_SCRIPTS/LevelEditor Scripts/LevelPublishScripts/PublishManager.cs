@@ -1,7 +1,11 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Firebase;
+using Firebase.Unity.Editor;
+using Firebase.Database;
 
 public class PublishManager : MonoBehaviour {
 
@@ -10,11 +14,51 @@ public class PublishManager : MonoBehaviour {
 
     public PublishElement[] publishElements;
 
+    DatabaseReference reference;
     Animator anim;
+
+    private string url; //Don't push it on github.
+
+    private string playerKeyName;
+    private string visiblePlayerName;
+    private string levelName;
 
     private void Start()
     {
+        url = GetDatabaseUrl();
+
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl(url);
+        reference = FirebaseDatabase.DefaultInstance.RootReference;
+
         anim = GetComponent<Animator>();
+        
+        visiblePlayerName = PublishController.GetVisiblePlayerName();
+        if(visiblePlayerName != null)
+        {
+            playerNameField.image.color = Color.black;
+            playerNameField.text = visiblePlayerName;
+            playerNameField.transform.Find("Text").GetComponent<Text>().color = Color.white;
+            playerNameField.interactable = false;
+        }
+
+        SetPlayerName();
+    }
+
+    public void UploadData(int objectId, ELEMENT _elementType, COLORCODE _color, float _capacity, float _shootAmount, Vector3 _position, Quaternion _rotation)
+    {
+        ElementData data = new ElementData();
+        data.e_dataType = _elementType;
+        data.e_dataColor = _color;
+        data.e_dataCapacity = _capacity;
+        data.e_dataEnergyToReduce = _shootAmount;
+        data.e_dataPosition = _position;
+        data.e_dataRotation = _rotation;
+
+        string objectIdentifier = objectId.ToString();
+        string json = JsonUtility.ToJson(data);
+
+        reference.Child("levels").Child(playerKeyName).Child(levelName).Child(objectIdentifier).SetRawJsonValueAsync(json);
+        //Transport player to another scene (MAIN MENU, COMMUNITY, ETC.) after publishing.
     }
 
     public void SetPublishElements()
@@ -29,14 +73,17 @@ public class PublishManager : MonoBehaviour {
 
     public void SetLevelName()
     {
-        //Take help of PublishController and Google API Push Method to Get and Set name here.
-        print(levelNameField.text);
+        levelName = levelNameField.text;
     }
 
     public void SetPlayerName()
     {
-        //Take help of PublishController and Google API Push Method to Get and Set name here.
-        print(playerNameField.text);
+        playerKeyName = PublishController.GetUniquePlayerName();
+        if(playerKeyName == null)
+        {
+            PublishController.SetUniquePlayerName(playerNameField.text);
+            playerKeyName = PublishController.GetUniquePlayerName();
+        }
     }
 
     public void PublishLevelButton()
@@ -45,8 +92,24 @@ public class PublishManager : MonoBehaviour {
         {
             if(publishElements[i] != null)
             {
-                publishElements[i].UploadData();
+                publishElements[i].objectId = i;
+                publishElements[i].WriteElementData();
             }
         }
     }
+
+    private string GetDatabaseUrl()
+    {
+        string json = File.ReadAllText(Application.dataPath + "/ApiKeys.json");
+        APIKEYS keys = JsonUtility.FromJson<APIKEYS>(json);
+        string databaseUrlKey = keys.databaseUrl;
+        print(databaseUrlKey);
+
+        return databaseUrlKey;
+    }
+}
+
+public class APIKEYS
+{
+    public string databaseUrl;
 }

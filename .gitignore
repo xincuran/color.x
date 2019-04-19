@@ -34,3 +34,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+colorox/Assets/playerID.json
+colorox/Assets/playerID.json.meta
+colorox/Assets/ApiKeys.json.meta
+colorox/Assets/ApiKeys.json
+colorox/Assets/google-services.json
+colorox/Assets/google-services.json.meta

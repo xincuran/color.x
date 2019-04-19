@@ -4,25 +4,19 @@ using UnityEngine;
 
 public class PublishElement : MonoBehaviour {
 
+    public int objectId;
+
     private StoredEnergy dataClass;
+    private PublishManager manager;
 
     // Use this for initialization
     void Start () {
         dataClass = GetComponent<StoredEnergy>();
+        manager = FindObjectOfType<PublishManager>();
 	}
 	
-	public void UploadData()
+	public void WriteElementData()
     {
-        ElementData data = new ElementData();
-        data.e_dataCapacity = dataClass.capacity;
-        data.e_dataColor = dataClass.elementColor;
-        data.e_dataEnergyToReduce = dataClass.energyToReduce;
-        data.e_dataType = dataClass.elementType;
-        data.e_dataPosition = dataClass.transform.position;
-        data.e_dataRotation = dataClass.transform.rotation;
-
-        string json = JsonUtility.ToJson(data);
-
-        //upload json data to database here.
+        manager.UploadData(objectId, dataClass.elementType, dataClass.elementColor, dataClass.capacity, dataClass.energyToReduce, dataClass.transform.position, dataClass.transform.rotation);
     }
 }
