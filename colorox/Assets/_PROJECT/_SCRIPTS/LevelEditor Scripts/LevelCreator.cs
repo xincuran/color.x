@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelCreator : MonoBehaviour {
 
@@ -26,20 +27,23 @@ public class LevelCreator : MonoBehaviour {
     Plane plane;
     Animator anim;
     bool isMoving;
+    bool editorWindowClosed;
 
     private void Start()
     {
         plane = new Plane(Vector3.forward, transform.position);
         anim = levelCreatorMenu.GetComponent<Animator>();
+
+        CloseEditorWindowCommand();
     }
 
     private void Update()
     {
-        if (isMoving && Input.touchCount >= 1)
+        if (isMoving && Input.touchCount >= 1 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             float enter = 0;
-            if(plane.Raycast(ray, out enter))
+            if (plane.Raycast(ray, out enter))
             {
                 elementToEdit.transform.position = ray.GetPoint(enter);
                 levelCreatorMenu.SetActive(true);
@@ -80,11 +84,11 @@ public class LevelCreator : MonoBehaviour {
 
     public void CreateWatt()
     {
-        EditableElement elementGO = Instantiate(wattPrefab, Vector3.zero, Quaternion.identity);        
+        EditableElement elementGO = Instantiate(wattPrefab, Vector3.zero, Quaternion.identity);
         ElementCreator(elementGO);
     }
 
-    private void ElementCreator (EditableElement elementGO)
+    private void ElementCreator(EditableElement elementGO)
     {
         elementGO.transform.SetParent(elementHolder.transform);
 
@@ -115,6 +119,7 @@ public class LevelCreator : MonoBehaviour {
         editMoveMenu.SetActive(false);
         levelCreatorMenu.SetActive(false);
         CloseDockButton();
+        editorWindowClosed = false;
         levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(false);
     }
 
@@ -137,7 +142,7 @@ public class LevelCreator : MonoBehaviour {
             {
                 currentElements[i].SpawnPlayableElements();
             }
-            else if(currentElements[i] == null)
+            else if (currentElements[i] == null)
             {
                 currentElements.Remove(currentElements[i]);
             }
@@ -187,6 +192,28 @@ public class LevelCreator : MonoBehaviour {
         anim.SetTrigger("CloseDock");
         dockButton.SetActive(false);
         levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(true);
+    }
+
+    public void MainMenuButton()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public bool CheckEditorWindowClosed()
+    {
+        if(editorWindowClosed == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void CloseEditorWindowCommand()
+    {
+        editorWindowClosed = true;
     }
 
     private Vector3 SetEditorWindowPosition(float a, float b)

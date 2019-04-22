@@ -7,17 +7,21 @@ using Firebase;
 using Firebase.Unity.Editor;
 using Firebase.Database;
 
+//Publish Button Cannot be pressed without player name. Interactable = false. (Don't forget to make this to avoid unnamed players.)
 public class PublishManager : MonoBehaviour {
 
     public InputField levelNameField;
     public InputField playerNameField;
+    public Button publishButton;
+
+    public TextAsset apiKeyFile;
 
     public PublishElement[] publishElements;
 
     DatabaseReference reference;
     Animator anim;
 
-    private string url; //Don't push it on github.
+    private string url;
 
     private string playerKeyName;
     private string visiblePlayerName;
@@ -25,13 +29,14 @@ public class PublishManager : MonoBehaviour {
 
     private void Start()
     {
+        anim = GetComponent<Animator>();
+
         url = GetDatabaseUrl();
 
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl(url);
         reference = FirebaseDatabase.DefaultInstance.RootReference;
 
-        anim = GetComponent<Animator>();
-        
+        playerKeyName = PublishController.GetUniquePlayerName();
         visiblePlayerName = PublishController.GetVisiblePlayerName();
         if(visiblePlayerName != null)
         {
@@ -41,7 +46,10 @@ public class PublishManager : MonoBehaviour {
             playerNameField.interactable = false;
         }
 
-        SetPlayerName();
+        if(playerKeyName == null)
+        {
+            publishButton.interactable = false;
+        }
     }
 
     public void UploadData(int objectId, ELEMENT _elementType, COLORCODE _color, float _capacity, float _shootAmount, Vector3 _position, Quaternion _rotation)
@@ -57,8 +65,7 @@ public class PublishManager : MonoBehaviour {
         string objectIdentifier = objectId.ToString();
         string json = JsonUtility.ToJson(data);
 
-        reference.Child("levels").Child(playerKeyName).Child(levelName).Child(objectIdentifier).SetRawJsonValueAsync(json);
-        //Transport player to another scene (MAIN MENU, COMMUNITY, ETC.) after publishing.
+        reference.Child("levels").Child(playerKeyName).Child(levelName + " by " + visiblePlayerName).Child(objectIdentifier).SetRawJsonValueAsync(json);
     }
 
     public void SetPublishElements()
@@ -83,6 +90,11 @@ public class PublishManager : MonoBehaviour {
         {
             PublishController.SetUniquePlayerName(playerNameField.text);
             playerKeyName = PublishController.GetUniquePlayerName();
+            visiblePlayerName = PublishController.GetVisiblePlayerName();
+            if(playerNameField.text != null && playerNameField.text != "")
+            {
+                publishButton.interactable = true;
+            }
         }
     }
 
@@ -100,7 +112,7 @@ public class PublishManager : MonoBehaviour {
 
     private string GetDatabaseUrl()
     {
-        string json = File.ReadAllText(Application.dataPath + "/ApiKeys.json");
+        string json = apiKeyFile.text;
         APIKEYS keys = JsonUtility.FromJson<APIKEYS>(json);
         string databaseUrlKey = keys.databaseUrl;
         print(databaseUrlKey);

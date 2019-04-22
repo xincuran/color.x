@@ -40,7 +40,6 @@ public class EditableElement : MonoBehaviour {
             elementGO.SetColor();
         }
         correspondingElement = elementGO;
-        //Create a docker for level creator menu.
 
         gameObject.SetActive(false);
     }
@@ -55,8 +54,11 @@ public class EditableElement : MonoBehaviour {
 
     private void OnMouseDown()
     {
-        levelCreator.EnableEditMoveMenu(this);
+        if(levelCreator.CheckEditorWindowClosed() == true)
+        {
+            levelCreator.EnableEditMoveMenu(this);
 
-        levelCreator.SetElementEditor();
+            levelCreator.SetElementEditor();
+        }
     }
 }

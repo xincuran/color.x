@@ -13,15 +13,15 @@ public static class PublishController {
         id.visiblePlayerName = nameToSet;
 
         string json = JsonUtility.ToJson(id);
-        File.WriteAllText(Application.dataPath + "/playerID.json", json);
+        File.WriteAllText(GetPathToPlayerID(), json);
     }
 
     public static string GetUniquePlayerName ()
     {
         string name = "";
-        if (File.Exists(Application.dataPath + "/playerID.json"))
+        if (File.Exists(GetPathToPlayerID()))
         {
-            string json = File.ReadAllText(Application.dataPath + "/playerID.json");
+            string json = File.ReadAllText(GetPathToPlayerID());
             PlayerIdentity id = JsonUtility.FromJson<PlayerIdentity>(json);
 
             name = id.playerName;
@@ -36,9 +36,9 @@ public static class PublishController {
     public static string GetVisiblePlayerName()
     {
         string name = "";
-        if (File.Exists(Application.dataPath + "/playerID.json"))
+        if (File.Exists(GetPathToPlayerID()))
         {
-            string json = File.ReadAllText(Application.dataPath + "/playerID.json");
+            string json = File.ReadAllText(GetPathToPlayerID());
             PlayerIdentity id = JsonUtility.FromJson<PlayerIdentity>(json);
 
             name = id.visiblePlayerName;
@@ -48,6 +48,19 @@ public static class PublishController {
         {
             return null;
         }
+    }
+
+    static string GetPathToPlayerID()
+    {
+        string pathToPlayerID;
+
+#if UNITY_EDITOR
+        pathToPlayerID = (Application.dataPath + "/playerID.json");
+#elif UNITY_ANDROID
+        pathToPlayerID = (Application.persistentDataPath + "/playerID.json");
+#endif
+
+        return pathToPlayerID;
     }
 }
 
