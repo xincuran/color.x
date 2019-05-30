@@ -58,6 +58,7 @@ public class ElementEditor : MonoBehaviour {
         Destroy(elementEntity.gameObject);
         FindObjectOfType<LevelCreator>().levelCreatorMenu.SetActive(true);
         FindObjectOfType<LevelCreator>().levelCreatorMenu.transform.Find("Dock Button").gameObject.SetActive(true);
+        FindObjectOfType<LevelCreator>().CloseEditorWindowCommand();
         gameObject.SetActive(false);
     }
 

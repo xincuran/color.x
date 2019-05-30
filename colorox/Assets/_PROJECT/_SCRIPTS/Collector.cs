@@ -4,14 +4,17 @@ using UnityEngine;
 
 [RequireComponent(typeof(StoredEnergy))]
 public class Collector : MonoBehaviour {
-    
+
     StoredEnergy energyComponent;
 
     float collectedEnergy;
     string colorOfEnergy;
 
+    bool isFilled;
+
     private void Start()
     {
+        GameManager.instance.collectorsInLevel += 1;
         energyComponent = GetComponent<StoredEnergy>();
     }
 
@@ -21,6 +24,13 @@ public class Collector : MonoBehaviour {
         {
             energyComponent.AddEnergy(collectedEnergy, colorOfEnergy);
             collectedEnergy = 0;
+        }
+
+        if (energyComponent.currentEnergy >= energyComponent.capacity && !isFilled)
+        {
+            GameManager.instance.collectorsFilled += 1;
+            GameManager.instance.OnCollectorFilled();
+            isFilled = true;
         }
     }
 
