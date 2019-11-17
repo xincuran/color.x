@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EditableElement : MonoBehaviour {
 
@@ -14,6 +15,8 @@ public class EditableElement : MonoBehaviour {
     LevelCreator levelCreator;
     StoredEnergy correspondingElement;
 
+    private float defaultSliderValue;
+
     private void Start()
     {
         levelCreator = FindObjectOfType<LevelCreator>();
@@ -23,6 +26,8 @@ public class EditableElement : MonoBehaviour {
     {
         StoredEnergy elementGO = Instantiate(e_ElementType, transform.position, transform.rotation);
         elementGO.transform.SetParent(levelCreator.elementHolder.transform);
+
+        #region special element conditions
 
         elementGO.capacity = e_Capacity;
         if(elementGO.elementType == ELEMENT.GENERATOR)
@@ -39,6 +44,16 @@ public class EditableElement : MonoBehaviour {
             elementGO.SetColorString();
             elementGO.SetColor();
         }
+        if(elementGO.elementType == ELEMENT.WATTSLIDER)
+        {
+            elementGO.GetComponent<RectTransform>().sizeDelta = GetComponent<RectTransform>().sizeDelta;
+            elementGO.GetComponentInChildren<Generator>().transform.rotation = GetComponentInChildren<Generator>().transform.rotation;
+            defaultSliderValue = GetComponent<Slider>().value;
+            elementGO.GetComponent<WattSlider>().SetDefaultPosition(defaultSliderValue);
+        }
+
+#endregion
+
         correspondingElement = elementGO;
 
         gameObject.SetActive(false);

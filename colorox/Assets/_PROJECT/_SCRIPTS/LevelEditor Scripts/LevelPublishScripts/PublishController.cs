@@ -72,6 +72,9 @@ public class ElementData
     public float e_dataEnergyToReduce;
     public Vector3 e_dataPosition;
     public Quaternion e_dataRotation;
+    public float e_width;
+    public Quaternion e_wRotation;
+    public float e_defaultLocation;
 }
 
 public class PlayerIdentity

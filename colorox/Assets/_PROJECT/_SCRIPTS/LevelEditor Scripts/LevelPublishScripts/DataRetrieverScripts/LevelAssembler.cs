@@ -13,6 +13,7 @@ public class LevelAssembler : MonoBehaviour {
     public GameObject generatorPrefabToSpawn;
     public GameObject wattPrefabToSpawn;
     public GameObject collectorPrefabToSpawn;
+    public GameObject sliderPrefabToSpawn;
 
     LevelData levelData;
     int numberOfElements;
@@ -66,6 +67,10 @@ public class LevelAssembler : MonoBehaviour {
 
             case 2:
                 elementGO = Instantiate(collectorPrefabToSpawn.gameObject);
+                break;
+
+            case 3:
+                elementGO = Instantiate(sliderPrefabToSpawn.gameObject);
                 break;
 
             default:

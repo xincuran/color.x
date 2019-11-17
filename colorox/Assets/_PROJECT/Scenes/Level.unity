@@ -468,6 +468,8 @@ MonoBehaviour:
     type: 2}
   collectorPrefabToSpawn: {fileID: 1659111623061156, guid: 7782c68ad61ab6147974e7f240ad7fc0,
     type: 2}
+  sliderPrefabToSpawn: {fileID: 1638286095054018, guid: aa90c2799953f24499232f40dde72bf0,
+    type: 2}
 --- !u!1 &1724546982
 GameObject:
   m_ObjectHideFlags: 0

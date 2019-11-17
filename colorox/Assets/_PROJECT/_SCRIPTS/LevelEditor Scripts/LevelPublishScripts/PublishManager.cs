@@ -52,6 +52,7 @@ public class PublishManager : MonoBehaviour {
         }
     }
 
+#region polymorph upload
     public void UploadData(int objectId, ELEMENT _elementType, COLORCODE _color, float _capacity, float _shootAmount, Vector3 _position, Quaternion _rotation)
     {
         ElementData data = new ElementData();
@@ -67,6 +68,26 @@ public class PublishManager : MonoBehaviour {
 
         reference.Child("levels").Child(playerKeyName).Child(levelName + " by " + visiblePlayerName).Child(objectIdentifier).SetRawJsonValueAsync(json);
     }
+
+    public void UploadData(int objectId, ELEMENT _elementType, COLORCODE _color, float _capacity, float _shootAmount, Vector3 _position, Quaternion _rotation, float _width, Quaternion _wRotation, float _defaultLocation)
+    {
+        ElementData data = new ElementData();
+        data.e_dataType = _elementType;
+        data.e_dataColor = _color;
+        data.e_dataCapacity = _capacity;
+        data.e_dataEnergyToReduce = _shootAmount;
+        data.e_dataPosition = _position;
+        data.e_dataRotation = _rotation;
+        data.e_width = _width;
+        data.e_wRotation = _wRotation;
+        data.e_defaultLocation = _defaultLocation;
+
+        string objectIdentifier = objectId.ToString();
+        string json = JsonUtility.ToJson(data);
+
+        reference.Child("levels").Child(playerKeyName).Child(levelName + " by " + visiblePlayerName).Child(objectIdentifier).SetRawJsonValueAsync(json);
+    }
+    #endregion
 
     public void SetPublishElements()
     {

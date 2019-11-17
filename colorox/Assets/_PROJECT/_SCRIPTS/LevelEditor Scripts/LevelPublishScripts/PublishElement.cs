@@ -18,5 +18,9 @@ public class PublishElement : MonoBehaviour {
 	public void WriteElementData()
     {
         manager.UploadData(objectId, dataClass.elementType, dataClass.elementColor, dataClass.capacity, dataClass.energyToReduce, dataClass.transform.position, dataClass.transform.rotation);
+        if(dataClass.elementType == ELEMENT.WATTSLIDER)
+        {
+            manager.UploadData(objectId, dataClass.elementType, dataClass.elementColor, dataClass.capacity, dataClass.energyToReduce, dataClass.transform.position, dataClass.transform.rotation, dataClass.GetComponent<RectTransform>().rect.width, dataClass.transform.Find("Handle Slide Area").Find("Watt").rotation, dataClass.gameObject.GetComponent<WattSlider>().GetDefaultPosition());
+        }
     }
 }

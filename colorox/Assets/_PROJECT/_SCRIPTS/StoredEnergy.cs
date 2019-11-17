@@ -187,5 +187,6 @@ public enum ELEMENT
 {
     GENERATOR,
     WATT,
-    COLLECTOR
+    COLLECTOR,
+    WATTSLIDER
 }

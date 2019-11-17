@@ -22,6 +22,7 @@ public class LevelCreator : MonoBehaviour {
     public EditableElement generatorPrefab;
     public EditableElement collectorPrefab;
     public EditableElement wattPrefab;
+    public EditableElement wattSliderPrefab;
 
     EditableElement elementToEdit;
     Plane plane;
@@ -70,6 +71,7 @@ public class LevelCreator : MonoBehaviour {
         dockButton.transform.position = levelCreatorMenu.transform.Find("Dock Button").position;
     }
 
+    #region create element
     public void CreateGenerator()
     {
         EditableElement elementGO = Instantiate(generatorPrefab, Vector3.zero, Quaternion.identity);
@@ -87,6 +89,13 @@ public class LevelCreator : MonoBehaviour {
         EditableElement elementGO = Instantiate(wattPrefab, Vector3.zero, Quaternion.identity);
         ElementCreator(elementGO);
     }
+
+    public void CreateWattSlider()
+    {
+        EditableElement elementGO = Instantiate(wattSliderPrefab, Vector3.zero, Quaternion.identity);
+        ElementCreator(elementGO);
+    }
+#endregion
 
     private void ElementCreator(EditableElement elementGO)
     {

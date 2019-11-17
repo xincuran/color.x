@@ -27,6 +27,7 @@ public class Generator : MonoBehaviour {
         if (GetComponentInParent<WattSlider>())
         {
             GetComponentInParent<WattSlider>().totalChange = 0;
+            GetSliderChange(0);
         }
     }
 

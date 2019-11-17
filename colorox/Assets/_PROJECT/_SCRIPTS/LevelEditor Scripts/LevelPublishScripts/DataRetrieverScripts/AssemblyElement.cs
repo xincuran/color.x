@@ -60,6 +60,12 @@ public class AssemblyElement : MonoBehaviour {
             element.SetColorString();
             element.SetColor();
         }
+        if(data.e_dataType == ELEMENT.WATTSLIDER)
+        {
+            element.GetComponent<RectTransform>().sizeDelta = new Vector2(data.e_width, element.GetComponent<RectTransform>().rect.height);
+            element.transform.Find("Handle Slide Area").Find("Watt").rotation = data.e_wRotation;
+            element.GetComponent<UnityEngine.UI.Slider>().value = data.e_defaultLocation;
+        }
 
         Destroy(gameObject);
     }
